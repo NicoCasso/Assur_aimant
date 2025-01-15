@@ -16,6 +16,9 @@ class BmiTransformer(BaseEstimator, TransformerMixin):
     def fit(self, X, y=None):
         return self
     
+    def get_feature_names_out(self, input_features = None) :
+        return np.array['bmi2']
+
     def categorize(self, value) :
         current_category = 0 
         for category in self.bins :
