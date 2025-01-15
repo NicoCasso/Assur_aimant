@@ -10,13 +10,21 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.datasets import make_classification
 
 class BmiTransformer(BaseEstimator, TransformerMixin):
-    def __init__(self, bins : np.ndarray):
+    def __init__(self, bins):
         self.bins = bins
     
     def fit(self, X, y=None):
         return self
     
+    def categorize(self, value) :
+        current_category = 0 
+        for category in self.bins :
+            if value < category :
+                return current_category
+            else : current_category +=1
+        return current_category
+
     def transform(self, X_initial):
         X = pd.DataFrame(X_initial)
-        X["bmi"] = pd.cut(X['bmi'], bins=self.bins, labels=False, right=False, include_lowest=True)
+        X["bmi"] = X_initial["bmi"].apply( lambda val : self.categorize(val))
         return X
